@@ -1,12 +1,5 @@
 ﻿<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<TrustFrameworkPolicy
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xmlns:xsd="http://www.w3.org/2001/XMLSchema"
-  xmlns="http://schemas.microsoft.com/online/cpim/schemas/2013/06"
-  PolicySchemaVersion="0.3.0.0"
-  TenantId="sourcewellb2cauthdev.onmicrosoft.com"
-  PolicyId="B2C_1A_TrustFrameworkBase"
-  PublicPolicyUri="http://sourcewellb2cauthdev.onmicrosoft.com/B2C_1A_TrustFrameworkBase">
+<TrustFrameworkPolicy xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://schemas.microsoft.com/online/cpim/schemas/2013/06" PolicySchemaVersion="0.3.0.0" TenantId="sourcewellb2cauthdev.onmicrosoft.com" PolicyId="B2C_1A_TrustFrameworkBase" PublicPolicyUri="http://sourcewellb2cauthdev.onmicrosoft.com/B2C_1A_TrustFrameworkBase">
 
   <BuildingBlocks>
     <ClaimsSchema>
@@ -30,7 +23,7 @@
       <ClaimType Id="issuerUserId">
         <DisplayName>Username</DisplayName>
         <DataType>string</DataType>
-        <UserHelpText/>
+        <UserHelpText />
         <UserInputType>TextBox</UserInputType>
         <Restriction>
           <Pattern RegularExpression="^[a-zA-Z0-9]+[a-zA-Z0-9_-]*$" HelpText="The username you provided is not valid. It must begin with an alphabet or number and can contain alphabets, numbers and the following symbols: _ -" />
@@ -63,7 +56,7 @@
       <ClaimType Id="signInName">
         <DisplayName>Sign in name</DisplayName>
         <DataType>string</DataType>
-        <UserHelpText/>
+        <UserHelpText />
         <UserInputType>TextBox</UserInputType>
       </ClaimType>
 
@@ -151,13 +144,13 @@
         <DefaultPartnerClaimTypes>
           <Protocol Name="OpenIdConnect" PartnerClaimType="sub" />
         </DefaultPartnerClaimTypes>
-        <UserHelpText/>
+        <UserHelpText />
       </ClaimType>
 
       <ClaimType Id="alternativeSecurityId">
         <DisplayName>AlternativeSecurityId</DisplayName>
         <DataType>string</DataType>
-        <UserHelpText/>
+        <UserHelpText />
       </ClaimType>
 
       <ClaimType Id="mailNickName">
@@ -174,7 +167,7 @@
           <Protocol Name="OpenIdConnect" PartnerClaimType="idp" />
           <Protocol Name="SAML2" PartnerClaimType="http://schemas.microsoft.com/identity/claims/identityprovider" />
         </DefaultPartnerClaimTypes>
-        <UserHelpText/>
+        <UserHelpText />
       </ClaimType>
 
       <ClaimType Id="displayName">
@@ -228,7 +221,7 @@
       <ClaimType Id="newUser">
         <DisplayName>User is new</DisplayName>
         <DataType>boolean</DataType>
-        <UserHelpText/>
+        <UserHelpText />
       </ClaimType>
 
       <ClaimType Id="executed-SelfAsserted-Input">
@@ -474,50 +467,50 @@
     -->
   <ClaimsProviders>
 
-    <ClaimsProvider>
-      <!-- The following Domain element allows this profile to be used if the request comes with domain_hint 
-           query string parameter, e.g. domain_hint=facebook.com  -->
-      <Domain>facebook.com</Domain>
-      <DisplayName>Facebook</DisplayName>
-      <TechnicalProfiles>
-        <TechnicalProfile Id="Facebook-OAUTH">
-          <!-- The text in the following DisplayName element is shown to the user on the claims provider 
-               selection screen. -->
-          <DisplayName>Facebook</DisplayName>
-          <Protocol Name="OAuth2" />
-          <Metadata>
-            <Item Key="ProviderName">facebook</Item>
-            <Item Key="authorization_endpoint">https://www.facebook.com/dialog/oauth</Item>
-            <Item Key="AccessTokenEndpoint">https://graph.facebook.com/oauth/access_token</Item>
-            <Item Key="HttpBinding">GET</Item>
-            <Item Key="UsePolicyInRedirectUri">0</Item>
+    <!-- <ClaimsProvider>
+      <!- - The following Domain element allows this profile to be used if the request comes with domain_hint 
+           query string parameter, e.g. domain_hint=facebook.com  - ->
+    <Domain>facebook.com</Domain>
+    <DisplayName>Facebook</DisplayName>
+    <TechnicalProfiles>
+      <TechnicalProfile Id="Facebook-OAUTH">
+        <!- - The text in the following DisplayName element is shown to the user on the claims provider 
+               selection screen. - ->
+        <DisplayName>Facebook</DisplayName>
+        <Protocol Name="OAuth2" />
+        <Metadata>
+          <Item Key="ProviderName">facebook</Item>
+          <Item Key="authorization_endpoint">https://www.facebook.com/dialog/oauth</Item>
+          <Item Key="AccessTokenEndpoint">https://graph.facebook.com/oauth/access_token</Item>
+          <Item Key="HttpBinding">GET</Item>
+          <Item Key="UsePolicyInRedirectUri">0</Item>
 
-            <!-- The Facebook required HTTP GET method, but the access token response is in JSON format from 3/27/2017 -->
-            <Item Key="AccessTokenResponseFormat">json</Item>
-          </Metadata>
-          <CryptographicKeys>
-            <Key Id="client_secret" StorageReferenceId="B2C_1A_FacebookSecret" />
-          </CryptographicKeys>
-          <InputClaims />
-          <OutputClaims>
-            <OutputClaim ClaimTypeReferenceId="issuerUserId" PartnerClaimType="id" />
-            <OutputClaim ClaimTypeReferenceId="givenName" PartnerClaimType="first_name" />
-            <OutputClaim ClaimTypeReferenceId="surname" PartnerClaimType="last_name" />
-            <OutputClaim ClaimTypeReferenceId="displayName" PartnerClaimType="name" />
-            <OutputClaim ClaimTypeReferenceId="email" PartnerClaimType="email" />
-            <OutputClaim ClaimTypeReferenceId="identityProvider" DefaultValue="facebook.com" AlwaysUseDefaultValue="true" />
-            <OutputClaim ClaimTypeReferenceId="authenticationSource" DefaultValue="socialIdpAuthentication" AlwaysUseDefaultValue="true" />
-          </OutputClaims>
-          <OutputClaimsTransformations>
-            <OutputClaimsTransformation ReferenceId="CreateRandomUPNUserName" />
-            <OutputClaimsTransformation ReferenceId="CreateUserPrincipalName" />
-            <OutputClaimsTransformation ReferenceId="CreateAlternativeSecurityId" />
-          </OutputClaimsTransformations>
-          <UseTechnicalProfileForSessionManagement ReferenceId="SM-SocialLogin" />
-        </TechnicalProfile>
-      </TechnicalProfiles>
+          <!- - The Facebook required HTTP GET method, but the access token response is in JSON format from 3/27/2017 - ->
+          <Item Key="AccessTokenResponseFormat">json</Item>
+        </Metadata>
+        <CryptographicKeys>
+          <Key Id="client_secret" StorageReferenceId="B2C_1A_FacebookSecret" />
+        </CryptographicKeys>
+        <InputClaims />
+        <OutputClaims>
+          <OutputClaim ClaimTypeReferenceId="issuerUserId" PartnerClaimType="id" />
+          <OutputClaim ClaimTypeReferenceId="givenName" PartnerClaimType="first_name" />
+          <OutputClaim ClaimTypeReferenceId="surname" PartnerClaimType="last_name" />
+          <OutputClaim ClaimTypeReferenceId="displayName" PartnerClaimType="name" />
+          <OutputClaim ClaimTypeReferenceId="email" PartnerClaimType="email" />
+          <OutputClaim ClaimTypeReferenceId="identityProvider" DefaultValue="facebook.com" AlwaysUseDefaultValue="true" />
+          <OutputClaim ClaimTypeReferenceId="authenticationSource" DefaultValue="socialIdpAuthentication" AlwaysUseDefaultValue="true" />
+        </OutputClaims>
+        <OutputClaimsTransformations>
+          <OutputClaimsTransformation ReferenceId="CreateRandomUPNUserName" />
+          <OutputClaimsTransformation ReferenceId="CreateUserPrincipalName" />
+          <OutputClaimsTransformation ReferenceId="CreateAlternativeSecurityId" />
+        </OutputClaimsTransformations>
+        <UseTechnicalProfileForSessionManagement ReferenceId="SM-SocialLogin" />
+      </TechnicalProfile>
+    </TechnicalProfiles>
     </ClaimsProvider>
-
+    -->
     <ClaimsProvider>
       <DisplayName>Local Account SignIn</DisplayName>
       <TechnicalProfiles>
@@ -1041,7 +1034,7 @@
 
         <OrchestrationStep Order="1" Type="CombinedSignInAndSignUp" ContentDefinitionReferenceId="api.signuporsignin">
           <ClaimsProviderSelections>
-            <ClaimsProviderSelection TargetClaimsExchangeId="FacebookExchange" />
+            <!-- <ClaimsProviderSelection TargetClaimsExchangeId="FacebookExchange" /> -->
             <ClaimsProviderSelection ValidationClaimsExchangeId="LocalAccountSigninEmailExchange" />
           </ClaimsProviderSelections>
           <ClaimsExchanges>
@@ -1058,7 +1051,7 @@
             </Precondition>
           </Preconditions>
           <ClaimsExchanges>
-            <ClaimsExchange Id="FacebookExchange" TechnicalProfileReferenceId="Facebook-OAUTH" />
+            <!-- <ClaimsExchange Id="FacebookExchange" TechnicalProfileReferenceId="Facebook-OAUTH" /> -->
             <ClaimsExchange Id="SignUpWithLogonEmailExchange" TechnicalProfileReferenceId="LocalAccountSignUpWithLogonEmail" />
           </ClaimsExchanges>
         </OrchestrationStep>
@@ -1132,13 +1125,13 @@
 
         <OrchestrationStep Order="1" Type="ClaimsProviderSelection" ContentDefinitionReferenceId="api.idpselections">
           <ClaimsProviderSelections>
-            <ClaimsProviderSelection TargetClaimsExchangeId="FacebookExchange" />
+            <!-- <ClaimsProviderSelection TargetClaimsExchangeId="FacebookExchange" /> -->
             <ClaimsProviderSelection TargetClaimsExchangeId="LocalAccountSigninEmailExchange" />
           </ClaimsProviderSelections>
         </OrchestrationStep>
         <OrchestrationStep Order="2" Type="ClaimsExchange">
           <ClaimsExchanges>
-            <ClaimsExchange Id="FacebookExchange" TechnicalProfileReferenceId="Facebook-OAUTH" />
+            <!-- <ClaimsExchange Id="FacebookExchange" TechnicalProfileReferenceId="Facebook-OAUTH" /> -->
             <ClaimsExchange Id="LocalAccountSigninEmailExchange" TechnicalProfileReferenceId="SelfAsserted-LocalAccountSignin-Email" />
           </ClaimsExchanges>
         </OrchestrationStep>
