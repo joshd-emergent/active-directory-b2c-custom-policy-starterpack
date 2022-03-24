@@ -1,15 +1,8 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
-<TrustFrameworkPolicy 
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
-  xmlns:xsd="http://www.w3.org/2001/XMLSchema" 
-  xmlns="http://schemas.microsoft.com/online/cpim/schemas/2013/06" 
-  PolicySchemaVersion="0.3.0.0" 
-  TenantId="yourtenant.onmicrosoft.com" 
-  PolicyId="B2C_1A_TrustFrameworkExtensions" 
-  PublicPolicyUri="http://yourtenant.onmicrosoft.com/B2C_1A_TrustFrameworkExtensions">
-  
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TrustFrameworkPolicy xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://schemas.microsoft.com/online/cpim/schemas/2013/06" PolicySchemaVersion="0.3.0.0" TenantId="sourcewellb2cauthdev.onmicrosoft.com" PolicyId="B2C_1A_TrustFrameworkExtensions" PublicPolicyUri="http://sourcewellb2cauthdev.onmicrosoft.com/B2C_1A_TrustFrameworkExtensions">
+
   <BasePolicy>
-    <TenantId>yourtenant.onmicrosoft.com</TenantId>
+    <TenantId>sourcewellb2cauthdev.onmicrosoft.com</TenantId>
     <PolicyId>B2C_1A_TrustFrameworkBase</PolicyId>
   </BasePolicy>
   <BuildingBlocks>
@@ -61,61 +54,61 @@
           <DisplayName>LinkedIn</DisplayName>
           <Protocol Name="OAuth2" />
           <Metadata>
-              <Item Key="ProviderName">linkedin</Item>
-              <Item Key="authorization_endpoint">https://www.linkedin.com/oauth/v2/authorization</Item>
-              <Item Key="AccessTokenEndpoint">https://www.linkedin.com/oauth/v2/accessToken</Item>
-              <Item Key="ClaimsEndpoint">https://api.linkedin.com/v2/me</Item>
-              <Item Key="scope">r_emailaddress r_liteprofile</Item>
-              <Item Key="HttpBinding">POST</Item>
-              <Item Key="external_user_identity_claim_id">id</Item>
-              <Item Key="BearerTokenTransmissionMethod">AuthorizationHeader</Item>
-              <Item Key="ResolveJsonPathsInJsonTokens">true</Item>
-              <Item Key="UsePolicyInRedirectUri">0</Item>
-              <Item Key="client_id">LinkedIn client_id</Item>
+            <Item Key="ProviderName">linkedin</Item>
+            <Item Key="authorization_endpoint">https://www.linkedin.com/oauth/v2/authorization</Item>
+            <Item Key="AccessTokenEndpoint">https://www.linkedin.com/oauth/v2/accessToken</Item>
+            <Item Key="ClaimsEndpoint">https://api.linkedin.com/v2/me</Item>
+            <Item Key="scope">r_emailaddress r_liteprofile</Item>
+            <Item Key="HttpBinding">POST</Item>
+            <Item Key="external_user_identity_claim_id">id</Item>
+            <Item Key="BearerTokenTransmissionMethod">AuthorizationHeader</Item>
+            <Item Key="ResolveJsonPathsInJsonTokens">true</Item>
+            <Item Key="UsePolicyInRedirectUri">0</Item>
+            <Item Key="client_id">LinkedIn client_id</Item>
           </Metadata>
           <CryptographicKeys>
-              <Key Id="client_secret" StorageReferenceId="B2C_1A_LinkedInSecret" />
+            <Key Id="client_secret" StorageReferenceId="B2C_1A_LinkedInSecret" />
           </CryptographicKeys>
           <InputClaims />
           <OutputClaims>
-              <OutputClaim ClaimTypeReferenceId="issuerUserId" PartnerClaimType="id" />
-              <OutputClaim ClaimTypeReferenceId="givenName" PartnerClaimType="firstName.localized" />
-              <OutputClaim ClaimTypeReferenceId="surname" PartnerClaimType="lastName.localized" />
-              <OutputClaim ClaimTypeReferenceId="identityProvider" DefaultValue="linkedin.com" AlwaysUseDefaultValue="true" />
-              <OutputClaim ClaimTypeReferenceId="authenticationSource" DefaultValue="socialIdpAuthentication" AlwaysUseDefaultValue="true" />
-              <OutputClaim ClaimTypeReferenceId="identityProviderAccessToken" PartnerClaimType="{oauth2:access_token}" />
+            <OutputClaim ClaimTypeReferenceId="issuerUserId" PartnerClaimType="id" />
+            <OutputClaim ClaimTypeReferenceId="givenName" PartnerClaimType="firstName.localized" />
+            <OutputClaim ClaimTypeReferenceId="surname" PartnerClaimType="lastName.localized" />
+            <OutputClaim ClaimTypeReferenceId="identityProvider" DefaultValue="linkedin.com" AlwaysUseDefaultValue="true" />
+            <OutputClaim ClaimTypeReferenceId="authenticationSource" DefaultValue="socialIdpAuthentication" AlwaysUseDefaultValue="true" />
+            <OutputClaim ClaimTypeReferenceId="identityProviderAccessToken" PartnerClaimType="{oauth2:access_token}" />
           </OutputClaims>
           <OutputClaimsTransformations>
-              <OutputClaimsTransformation ReferenceId="ExtractGivenNameFromLinkedInResponse" />
-              <OutputClaimsTransformation ReferenceId="ExtractSurNameFromLinkedInResponse" />
-              <OutputClaimsTransformation ReferenceId="CreateRandomUPNUserName" />
-              <OutputClaimsTransformation ReferenceId="CreateUserPrincipalName" />
-              <OutputClaimsTransformation ReferenceId="CreateAlternativeSecurityId" />
-              <OutputClaimsTransformation ReferenceId="CreateSubjectClaimFromAlternativeSecurityId" />
+            <OutputClaimsTransformation ReferenceId="ExtractGivenNameFromLinkedInResponse" />
+            <OutputClaimsTransformation ReferenceId="ExtractSurNameFromLinkedInResponse" />
+            <OutputClaimsTransformation ReferenceId="CreateRandomUPNUserName" />
+            <OutputClaimsTransformation ReferenceId="CreateUserPrincipalName" />
+            <OutputClaimsTransformation ReferenceId="CreateAlternativeSecurityId" />
+            <OutputClaimsTransformation ReferenceId="CreateSubjectClaimFromAlternativeSecurityId" />
           </OutputClaimsTransformations>
           <UseTechnicalProfileForSessionManagement ReferenceId="SM-SocialLogin" />
-          </TechnicalProfile>
-        </TechnicalProfiles>
+        </TechnicalProfile>
+      </TechnicalProfiles>
     </ClaimsProvider>
 
-    <ClaimsProvider> 
+    <ClaimsProvider>
       <DisplayName>REST APIs</DisplayName>
       <TechnicalProfiles>
         <TechnicalProfile Id="API-LinkedInEmail">
           <DisplayName>Get LinkedIn email</DisplayName>
           <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.RestfulProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
           <Metadata>
-              <Item Key="ServiceUrl">https://api.linkedin.com/v2/emailAddress?q=members&amp;projection=(elements*(handle~))</Item>
-              <Item Key="AuthenticationType">Bearer</Item>
-              <Item Key="UseClaimAsBearerToken">identityProviderAccessToken</Item>
-              <Item Key="SendClaimsIn">Url</Item>
-              <Item Key="ResolveJsonPathsInJsonTokens">true</Item>
+            <Item Key="ServiceUrl">https://api.linkedin.com/v2/emailAddress?q=members&amp;projection=(elements*(handle~))</Item>
+            <Item Key="AuthenticationType">Bearer</Item>
+            <Item Key="UseClaimAsBearerToken">identityProviderAccessToken</Item>
+            <Item Key="SendClaimsIn">Url</Item>
+            <Item Key="ResolveJsonPathsInJsonTokens">true</Item>
           </Metadata>
           <InputClaims>
-              <InputClaim ClaimTypeReferenceId="identityProviderAccessToken" />
+            <InputClaim ClaimTypeReferenceId="identityProviderAccessToken" />
           </InputClaims>
           <OutputClaims>
-              <OutputClaim ClaimTypeReferenceId="email" PartnerClaimType="elements[0].handle~.emailAddress" />
+            <OutputClaim ClaimTypeReferenceId="email" PartnerClaimType="elements[0].handle~.emailAddress" />
           </OutputClaims>
           <UseTechnicalProfileForSessionManagement ReferenceId="SM-Noop" />
         </TechnicalProfile>
@@ -127,11 +120,11 @@
       <TechnicalProfiles>
         <TechnicalProfile Id="login-NonInteractive">
           <Metadata>
-            <Item Key="client_id">ProxyIdentityExperienceFrameworkAppId</Item>
+            <Item Key="client_id">74469b06-78be-4b91-ac29-185099dc612a</Item>
             <Item Key="IdTokenAudience">IdentityExperienceFrameworkAppId</Item>
           </Metadata>
           <InputClaims>
-            <InputClaim ClaimTypeReferenceId="client_id" DefaultValue="ProxyIdentityExperienceFrameworkAppId" />
+            <InputClaim ClaimTypeReferenceId="client_id" DefaultValue="74469b06-78be-4b91-ac29-185099dc612a" />
             <InputClaim ClaimTypeReferenceId="resource_id" PartnerClaimType="resource" DefaultValue="IdentityExperienceFrameworkAppId" />
           </InputClaims>
         </TechnicalProfile>
@@ -143,7 +136,7 @@
 
     <UserJourney Id="SignUpOrSignInWithLinkedIn">
       <OrchestrationSteps>
-      
+
         <OrchestrationStep Order="1" Type="CombinedSignInAndSignUp" ContentDefinitionReferenceId="api.signuporsignin">
           <ClaimsProviderSelections>
             <ClaimsProviderSelection TargetClaimsExchangeId="LinkedInExchange" />
@@ -182,7 +175,7 @@
             </Precondition>
           </Preconditions>
           <ClaimsExchanges>
-              <ClaimsExchange Id="GetEmail" TechnicalProfileReferenceId="API-LinkedInEmail" />
+            <ClaimsExchange Id="GetEmail" TechnicalProfileReferenceId="API-LinkedInEmail" />
           </ClaimsExchanges>
         </OrchestrationStep>
 
@@ -243,9 +236,9 @@
             <ClaimsExchange Id="AADUserWrite" TechnicalProfileReferenceId="AAD-UserWriteUsingAlternativeSecurityId" />
           </ClaimsExchanges>
         </OrchestrationStep>
- 
+
         <OrchestrationStep Order="8" Type="SendClaims" CpimIssuerTechnicalProfileReferenceId="JwtIssuer" />
- 
+
       </OrchestrationSteps>
       <ClientDefinition ReferenceId="DefaultWeb" />
     </UserJourney>
