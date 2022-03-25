@@ -23,34 +23,34 @@
     </ClaimsProvider> -->
 
     <ClaimsProvider>
-      <Domain>okta.com</Domain>
-      <DisplayName>Login with OKTA</DisplayName>
+      <Domain>classlink.com</Domain>
+      <DisplayName>Login with ClassLink</DisplayName>
       <TechnicalProfiles>
-        <TechnicalProfile Id="OKTA-OpenIdConnect">
-          <DisplayName>OKTA</DisplayName>
-          <Description>Login with your OKTA account</Description>
+        <TechnicalProfile Id="ClassLink-OpenIdConnect">
+          <DisplayName>ClassLink</DisplayName>
+          <Description>Login with your ClassLink account</Description>
           <Protocol Name="OpenIdConnect" />
           <Metadata>
-            <Item Key="METADATA">https://dev-456048-admin.okta.com/oauth2/default/.well-known/openid-configuration</Item>
-            <Item Key="client_id">0oa6kqjynyUQFfofL4x7</Item>
-            <Item Key="response_types">code</Item>
+            <Item Key="METADATA">https://launchpad.classlink.com/.well-known/openid-configuration</Item>
+            <Item Key="client_id">c164745967502792b171340709348ba81c5518fece84</Item>
+            <Item Key="response_types">code id_token</Item>
             <Item Key="scope">openid profile email</Item>
-            <Item Key="response_mode">form_post</Item>
-            <Item Key="HttpBinding">POST</Item>
+            <Item Key="response_mode">query</Item>
+            <Item Key="HttpBinding">GET</Item>
             <Item Key="UsePolicyInRedirectUri">false</Item>
           </Metadata>
           <CryptographicKeys>
-            <Key Id="client_secret" StorageReferenceId="B2C_1A_OktaDevClientSecret" />
+            <Key Id="client_secret" StorageReferenceId="B2C_1A_ClassLinkDevClientSecret" />
           </CryptographicKeys>
           <OutputClaims>
-            <OutputClaim ClaimTypeReferenceId="issuerUserId" PartnerClaimType="sub" />
-            <OutputClaim ClaimTypeReferenceId="tenantId" PartnerClaimType="tid" />
-            <OutputClaim ClaimTypeReferenceId="givenName" PartnerClaimType="given_name" />
-            <OutputClaim ClaimTypeReferenceId="surName" PartnerClaimType="family_name" />
-            <OutputClaim ClaimTypeReferenceId="displayName" PartnerClaimType="name" />
-            <OutputClaim ClaimTypeReferenceId="email" PartnerClaimType="email" />
+            <OutputClaim ClaimTypeReferenceId="issuerUserId" PartnerClaimType="sub" DefaultValue="001id" />
+            <OutputClaim ClaimTypeReferenceId="tenantId" PartnerClaimType="tid" DefaultValue="001tenant" />
+            <OutputClaim ClaimTypeReferenceId="givenName" PartnerClaimType="given_name" DefaultValue="001givenName" />
+            <OutputClaim ClaimTypeReferenceId="surName" PartnerClaimType="family_name" DefaultValue="001FamilyName" />
+            <OutputClaim ClaimTypeReferenceId="displayName" PartnerClaimType="name" DefaultValue="001Name" />
+            <OutputClaim ClaimTypeReferenceId="email" PartnerClaimType="email" DefaultValue="001Name@example.com" />
             <OutputClaim ClaimTypeReferenceId="authenticationSource" DefaultValue="socialIdpAuthentication" AlwaysUseDefaultValue="true" />
-            <OutputClaim ClaimTypeReferenceId="identityProvider" PartnerClaimType="iss" />
+            <OutputClaim ClaimTypeReferenceId="identityProvider" PartnerClaimType="iss" DefaultValue="001iss" />
           </OutputClaims>
           <OutputClaimsTransformations>
             <OutputClaimsTransformation ReferenceId="CreateRandomUPNUserName" />
@@ -63,7 +63,6 @@
       </TechnicalProfiles>
     </ClaimsProvider>
 
-
     <ClaimsProvider>
       <Domain>okta.com</Domain>
       <DisplayName>Login with OKTA</DisplayName>
@@ -75,7 +74,7 @@
           <Metadata>
             <Item Key="METADATA">https://dev-456048-admin.okta.com/oauth2/default/.well-known/openid-configuration</Item>
             <Item Key="client_id">0oa6kqjynyUQFfofL4x7</Item>
-            <Item Key="response_types">code</Item>
+            <Item Key="response_types">code id_token</Item>
             <Item Key="scope">openid profile email</Item>
             <Item Key="response_mode">form_post</Item>
             <Item Key="HttpBinding">POST</Item>
@@ -125,7 +124,7 @@
   </ClaimsProviders>
 
   <UserJourneys>
-    <UserJourney Id="OktaSignUpOrSignIn">
+    <UserJourney Id="CustomSignUpOrSignIn">
       <OrchestrationSteps>
 
         <OrchestrationStep Order="1" Type="CombinedSignInAndSignUp" ContentDefinitionReferenceId="api.signuporsignin">
