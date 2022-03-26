@@ -65,6 +65,76 @@
     </ClaimsProvider>
 
     <ClaimsProvider>
+      <Domain>classlink.com</Domain>
+      <DisplayName>Login with ClassLink</DisplayName>
+      <TechnicalProfiles>
+        <TechnicalProfile Id="ClassLink-OAuth2">
+          <DisplayName>ClassLink</DisplayName>
+          <Description>Login with your ClassLink account</Description>
+          <Protocol Name="OAuth2" />
+          <Metadata>
+            <Item Key="ProviderName">classlink</Item>
+            <Item Key="client_id">c164745967502792b171340709348ba81c5518fece84</Item>
+            <!-- <Item Key="METADATA">https://launchpad.classlink.com/.well-known/openid-configuration</Item> -->
+            <Item Key="authorization_endpoint">https://launchpad.classlink.com/oauth2/v2/auth</Item>
+            <Item Key="AccessTokenEndpoint">https://launchpad.classlink.com/oauth2/v2/token</Item>
+            <Item Key="ClaimsEndpoint">https://nodeapi.classlink.com/v2/my/profileinfo</Item>
+            <Item Key="response_types">code</Item>
+            <Item Key="scope">openid profile email</Item>
+            <Item Key="response_mode">query</Item>
+            <Item Key="HttpBinding">POST</Item>
+            <Item Key="UsePolicyInRedirectUri">false</Item>
+            <Item Key="BearerTokenTransmissionMethod">AuthorizationHeader</Item>
+            <Item Key="ResolveJsonPathsInJsonTokens">true</Item>
+          </Metadata>
+          <CryptographicKeys>
+            <Key Id="client_secret" StorageReferenceId="B2C_1A_ClassLinkDevClientSecret" />
+          </CryptographicKeys>
+          <OutputClaims>
+            <!-- 
+              endpoint return
+              GET https://nodeapi.classlink.com/v2/my/profileinfo  
+              {
+                "sub": "32676814",
+                "name": "Test, Student",
+                "given_name": "Student",
+                "middle_name": "Test",
+                "family_name": "Test",
+                "preferred_username": null,
+                "email": "student.test@springmath.xyz",
+                "email_verified": true,
+                "profile": "SpringMath - Student",
+                "website": "",
+                "phone_number": "",
+                "phone_number_verified": false,
+                "picture": "",
+                "address": {
+                  "locality": "ClassLink Certification",
+                  "region": "New Jersey"
+                }
+            } -->
+            <OutputClaim ClaimTypeReferenceId="issuerUserId" PartnerClaimType="sub" />
+            <OutputClaim ClaimTypeReferenceId="tenantId" PartnerClaimType="tid" />
+            <OutputClaim ClaimTypeReferenceId="givenName" PartnerClaimType="given_name" />
+            <OutputClaim ClaimTypeReferenceId="surName" PartnerClaimType="family_name" />
+            <!-- <OutputClaim ClaimTypeReferenceId="displayName" PartnerClaimType="name" /> -->
+            <OutputClaim ClaimTypeReferenceId="email" PartnerClaimType="email" />
+            <OutputClaim ClaimTypeReferenceId="authenticationSource" DefaultValue="socialIdpAuthentication" AlwaysUseDefaultValue="true" />
+            <OutputClaim ClaimTypeReferenceId="identityProvider" DefaultValue="classlink" />
+            <OutputClaim ClaimTypeReferenceId="identityProviderAccessToken" PartnerClaimType="{oauth2:access_token}" />
+          </OutputClaims>
+          <OutputClaimsTransformations>
+            <OutputClaimsTransformation ReferenceId="CreateRandomUPNUserName" />
+            <OutputClaimsTransformation ReferenceId="CreateUserPrincipalName" />
+            <OutputClaimsTransformation ReferenceId="CreateAlternativeSecurityId" />
+            <OutputClaimsTransformation ReferenceId="CreateDisplayNameFromFirstNameAndLastName" />
+          </OutputClaimsTransformations>
+          <UseTechnicalProfileForSessionManagement ReferenceId="SM-SocialLogin" />
+        </TechnicalProfile>
+      </TechnicalProfiles>
+    </ClaimsProvider>
+
+    <ClaimsProvider>
       <Domain>clever.com</Domain>
       <DisplayName>Login with Clever</DisplayName>
       <TechnicalProfiles>
@@ -79,20 +149,21 @@
             <Item Key="authorization_endpoint">https://clever.com/oauth/authorize</Item>
             <Item Key="AccessTokenEndpoint">https://clever.com/oauth/tokens</Item>
             <Item Key="ClaimsEndpoint">https://api.clever.com/userinfo</Item>
-            <Item Key="BearerTokenTransmissionMethod">AuthorizationHeader</Item>
-            <Item Key="ResolveJsonPathsInJsonTokens">true</Item>
             <Item Key="response_types">code</Item>
             <Item Key="scope">openid profile email</Item>
             <Item Key="response_mode">query</Item>
             <Item Key="HttpBinding">POST</Item>
             <Item Key="UsePolicyInRedirectUri">false</Item>
+            <Item Key="BearerTokenTransmissionMethod">AuthorizationHeader</Item>
+            <Item Key="ResolveJsonPathsInJsonTokens">true</Item>
           </Metadata>
           <CryptographicKeys>
             <Key Id="client_secret" StorageReferenceId="B2C_1A_CleverDevClientSecret" />
           </CryptographicKeys>
           <OutputClaims>
             <!-- 
-              https://api.clever.com/userinfo endpoint return
+              endpoint return
+              GET https://api.clever.com/userinfo
               {
               "sub": "6234ef8c13b8a0039a06e3d2",
               "user_id": "6234ef8c13b8a0039a06e376",
@@ -222,7 +293,7 @@
           <ClaimsExchanges>
             <!-- <ClaimsExchange Id="FacebookExchange" TechnicalProfileReferenceId="Facebook-OAUTH" /> -->
             <ClaimsExchange Id="CleverSignin" TechnicalProfileReferenceId="Clever-OAuth2" />
-            <ClaimsExchange Id="ClassLinkSignin" TechnicalProfileReferenceId="ClassLink-OpenIdConnect" />
+            <ClaimsExchange Id="ClassLinkSignin" TechnicalProfileReferenceId="ClassLink-OAuth2" />
             <ClaimsExchange Id="OktaSignin" TechnicalProfileReferenceId="OKTA-OpenIdConnect" />
             <ClaimsExchange Id="SignUpWithLogonEmailExchange" TechnicalProfileReferenceId="LocalAccountSignUpWithLogonEmail" />
           </ClaimsExchanges>
