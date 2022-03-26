@@ -36,7 +36,7 @@
             <Item Key="response_types">code id_token</Item>
             <Item Key="scope">openid profile email</Item>
             <Item Key="response_mode">query</Item>
-            <Item Key="HttpBinding">GET</Item>
+            <Item Key="HttpBinding">POST</Item>
             <Item Key="UsePolicyInRedirectUri">false</Item>
           </Metadata>
           <CryptographicKeys>
@@ -50,13 +50,83 @@
             <OutputClaim ClaimTypeReferenceId="displayName" PartnerClaimType="name" DefaultValue="001Name" />
             <OutputClaim ClaimTypeReferenceId="email" PartnerClaimType="email" DefaultValue="001Name@example.com" />
             <OutputClaim ClaimTypeReferenceId="authenticationSource" DefaultValue="socialIdpAuthentication" AlwaysUseDefaultValue="true" />
-            <OutputClaim ClaimTypeReferenceId="identityProvider" PartnerClaimType="iss" DefaultValue="001iss" />
+            <OutputClaim ClaimTypeReferenceId="identityProvider" DefaultValue="classlink" AlwaysUseDefaultValue="true" />
+            <OutputClaim ClaimTypeReferenceId="identityProviderAccessToken" PartnerClaimType="{oauth2:access_token}" />
           </OutputClaims>
           <OutputClaimsTransformations>
             <OutputClaimsTransformation ReferenceId="CreateRandomUPNUserName" />
             <OutputClaimsTransformation ReferenceId="CreateUserPrincipalName" />
             <OutputClaimsTransformation ReferenceId="CreateAlternativeSecurityId" />
             <!-- <OutputClaimsTransformation ReferenceId="CreateSubjectClaimFromAlternativeSecurityId" /> -->
+          </OutputClaimsTransformations>
+          <UseTechnicalProfileForSessionManagement ReferenceId="SM-SocialLogin" />
+        </TechnicalProfile>
+      </TechnicalProfiles>
+    </ClaimsProvider>
+
+    <ClaimsProvider>
+      <Domain>clever.com</Domain>
+      <DisplayName>Login with Clever</DisplayName>
+      <TechnicalProfiles>
+        <TechnicalProfile Id="Clever-OAuth2">
+          <DisplayName>Clever</DisplayName>
+          <Description>Login with your Clever account</Description>
+          <Protocol Name="OAuth2" />
+          <Metadata>
+            <Item Key="ProviderName">clever</Item>
+            <Item Key="client_id">c0e6e6a15606c333ac84</Item>
+            <!-- <Item Key="METADATA">https://clever.com/.well-known/openid-configuration</Item> -->
+            <Item Key="authorization_endpoint">https://clever.com/oauth/authorize</Item>
+            <Item Key="AccessTokenEndpoint">https://clever.com/oauth/tokens</Item>
+            <Item Key="ClaimsEndpoint">https://api.clever.com/userinfo</Item>
+            <Item Key="BearerTokenTransmissionMethod">AuthorizationHeader</Item>
+            <Item Key="ResolveJsonPathsInJsonTokens">true</Item>
+            <Item Key="response_types">code</Item>
+            <Item Key="scope">openid profile email</Item>
+            <Item Key="response_mode">query</Item>
+            <Item Key="HttpBinding">POST</Item>
+            <Item Key="UsePolicyInRedirectUri">false</Item>
+          </Metadata>
+          <CryptographicKeys>
+            <Key Id="client_secret" StorageReferenceId="B2C_1A_CleverDevClientSecret" />
+          </CryptographicKeys>
+          <OutputClaims>
+            <!-- 
+              https://api.clever.com/userinfo endpoint return
+              {
+              "sub": "6234ef8c13b8a0039a06e3d2",
+              "user_id": "6234ef8c13b8a0039a06e376",
+              "multi_role_user_id": "6234ef8c13b8a0039a06e3d2",
+              "user_type": "teacher",
+              "district_id": "6234ee463742409bb052a017",
+              "district": "6234ee463742409bb052a017",
+              "email": "conn_reuben@example.net",
+              "name": {
+                  "first": "Reuben",
+                  "last": "Conn",
+                  "middle": "K"
+              },
+              "given_name": "Reuben",
+              "family_name": "Conn",
+              "email_verified": true,
+              "authorized_by": "district"
+              }             
+            -->
+            <OutputClaim ClaimTypeReferenceId="issuerUserId" PartnerClaimType="sub" />
+            <OutputClaim ClaimTypeReferenceId="tenantId" PartnerClaimType="tid" />
+            <OutputClaim ClaimTypeReferenceId="givenName" PartnerClaimType="given_name" />
+            <OutputClaim ClaimTypeReferenceId="surName" PartnerClaimType="family_name" />
+            <!-- <OutputClaim ClaimTypeReferenceId="displayName" PartnerClaimType="name" /> -->
+            <OutputClaim ClaimTypeReferenceId="email" PartnerClaimType="email" />
+            <OutputClaim ClaimTypeReferenceId="authenticationSource" DefaultValue="socialIdpAuthentication" AlwaysUseDefaultValue="true" />
+            <OutputClaim ClaimTypeReferenceId="identityProvider" DefaultValue="clever" AlwaysUseDefaultValue="true" />
+            <OutputClaim ClaimTypeReferenceId="identityProviderAccessToken" PartnerClaimType="{oauth2:access_token}" />
+          </OutputClaims>
+          <OutputClaimsTransformations>
+            <OutputClaimsTransformation ReferenceId="CreateRandomUPNUserName" />
+            <OutputClaimsTransformation ReferenceId="CreateUserPrincipalName" />
+            <OutputClaimsTransformation ReferenceId="CreateAlternativeSecurityId" />
+            <OutputClaimsTransformation ReferenceId="CreateDisplayNameFromFirstNameAndLastName" />
           </OutputClaimsTransformations>
           <UseTechnicalProfileForSessionManagement ReferenceId="SM-SocialLogin" />
         </TechnicalProfile>
@@ -74,9 +144,9 @@
           <Metadata>
             <Item Key="METADATA">https://dev-456048-admin.okta.com/oauth2/default/.well-known/openid-configuration</Item>
             <Item Key="client_id">0oa6kqjynyUQFfofL4x7</Item>
-            <Item Key="response_types">code id_token</Item>
+            <Item Key="response_types">code</Item>
             <Item Key="scope">openid profile email</Item>
-            <Item Key="response_mode">form_post</Item>
+            <Item Key="response_mode">query</Item>
             <Item Key="HttpBinding">POST</Item>
             <Item Key="UsePolicyInRedirectUri">false</Item>
           </Metadata>
@@ -91,7 +161,8 @@
             <OutputClaim ClaimTypeReferenceId="displayName" PartnerClaimType="name" />
             <OutputClaim ClaimTypeReferenceId="email" PartnerClaimType="email" />
             <OutputClaim ClaimTypeReferenceId="authenticationSource" DefaultValue="socialIdpAuthentication" AlwaysUseDefaultValue="true" />
-            <OutputClaim ClaimTypeReferenceId="identityProvider" PartnerClaimType="iss" />
+            <OutputClaim ClaimTypeReferenceId="identityProvider" DefaultValue="okta" AlwaysUseDefaultValue="true" />
+            <OutputClaim ClaimTypeReferenceId="identityProviderAccessToken" PartnerClaimType="{oauth2:access_token}" />
           </OutputClaims>
           <OutputClaimsTransformations>
             <OutputClaimsTransformation ReferenceId="CreateRandomUPNUserName" />
@@ -130,6 +201,7 @@
         <OrchestrationStep Order="1" Type="CombinedSignInAndSignUp" ContentDefinitionReferenceId="api.signuporsignin">
           <ClaimsProviderSelections>
             <!-- <ClaimsProviderSelection TargetClaimsExchangeId="FacebookExchange" /> -->
+            <ClaimsProviderSelection TargetClaimsExchangeId="CleverSignin" />
             <ClaimsProviderSelection TargetClaimsExchangeId="ClassLinkSignin" />
             <ClaimsProviderSelection TargetClaimsExchangeId="OktaSignin" />
             <ClaimsProviderSelection ValidationClaimsExchangeId="LocalAccountSigninEmailExchange" />
@@ -149,6 +221,7 @@
           </Preconditions>
           <ClaimsExchanges>
             <!-- <ClaimsExchange Id="FacebookExchange" TechnicalProfileReferenceId="Facebook-OAUTH" /> -->
+            <ClaimsExchange Id="CleverSignin" TechnicalProfileReferenceId="Clever-OAuth2" />
             <ClaimsExchange Id="ClassLinkSignin" TechnicalProfileReferenceId="ClassLink-OpenIdConnect" />
             <ClaimsExchange Id="OktaSignin" TechnicalProfileReferenceId="OKTA-OpenIdConnect" />
             <ClaimsExchange Id="SignUpWithLogonEmailExchange" TechnicalProfileReferenceId="LocalAccountSignUpWithLogonEmail" />
