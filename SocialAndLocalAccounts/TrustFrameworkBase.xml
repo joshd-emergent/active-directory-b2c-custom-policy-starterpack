@@ -309,6 +309,18 @@
         <AdminHelpText>Stores the eamil verification status from the identity provider.</AdminHelpText>
       </ClaimType>
 
+      <ClaimType Id="issuerUserIdInt">
+        <DisplayName>Identity Provider User Id in int form</DisplayName>
+        <DataType>long</DataType>
+        <AdminHelpText>Stores the user id from the identity provider as an int.</AdminHelpText>
+      </ClaimType>
+
+      <ClaimType Id="issuerOrgIdInt">
+        <DisplayName>Identity Provider Org Id in int form</DisplayName>
+        <DataType>long</DataType>
+        <AdminHelpText>Stores the Org Id from the identity provider as an int.</AdminHelpText>
+      </ClaimType>
+
     </ClaimsSchema>
 
     <ClaimsTransformations>
@@ -381,6 +393,24 @@
         </InputParameters>
         <OutputClaims>
           <OutputClaim ClaimTypeReferenceId="displayName" TransformationClaimType="outputClaim" />
+        </OutputClaims>
+      </ClaimsTransformation>
+
+      <ClaimsTransformation Id="CreateIssuerUserIdFromInt" TransformationMethod="ConvertNumberToStringClaim">
+        <InputClaims>
+          <InputClaim ClaimTypeReferenceId="issuerUserIdInt" TransformationClaimType="inputClaim" />
+        </InputClaims>
+        <OutputClaims>
+          <OutputClaim ClaimTypeReferenceId="issuerUserId" TransformationClaimType="outputClaim" />
+        </OutputClaims>
+      </ClaimsTransformation>
+
+      <ClaimsTransformation Id="CreateIssuerOrgIdFromInt" TransformationMethod="ConvertNumberToStringClaim">
+        <InputClaims>
+          <InputClaim ClaimTypeReferenceId="issuerOrgIdInt" TransformationClaimType="inputClaim" />
+        </InputClaims>
+        <OutputClaims>
+          <OutputClaim ClaimTypeReferenceId="issuerOrgId" TransformationClaimType="outputClaim" />
         </OutputClaims>
       </ClaimsTransformation>
     </ClaimsTransformations>

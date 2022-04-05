@@ -24,7 +24,8 @@
             <!-- <Item Key="METADATA">https://launchpad.classlink.com/.well-known/openid-configuration</Item> -->
             <Item Key="authorization_endpoint">https://launchpad.classlink.com/oauth2/v2/auth</Item>
             <Item Key="AccessTokenEndpoint">https://launchpad.classlink.com/oauth2/v2/token</Item>
-            <Item Key="ClaimsEndpoint">https://nodeapi.classlink.com/v2/my/profileinfo</Item>
+            <!-- <Item Key="ClaimsEndpoint">https://nodeapi.classlink.com/v2/my/profileinfo</Item> -->
+            <Item Key="ClaimsEndpoint">https://nodeapi.classlink.com/v2/my/info</Item>
             <Item Key="response_types">code</Item>
             <Item Key="scope">openid profile email</Item>
             <Item Key="response_mode">query</Item>
@@ -38,45 +39,118 @@
           </CryptographicKeys>
           <OutputClaims>
             <!-- 
-              endpoint return
-              GET https://nodeapi.classlink.com/v2/my/profileinfo  
-              {
-                "sub": "32676814",
-                "name": "Test, Student",
-                "given_name": "Student",
-                "middle_name": "Test",
-                "family_name": "Test",
-                "preferred_username": null,
-                "email": "student.test@springmath.xyz",
-                "email_verified": true,
-                "profile": "SpringMath - Student",
-                "website": "",
-                "phone_number": "",
-                "phone_number_verified": false,
-                "picture": "",
-                "address": {
-                  "locality": "ClassLink Certification",
-                  "region": "New Jersey"
-                }
+                endpoint return
+                GET https://nodeapi.classlink.com/v2/my/info
+                {
+                  "UserId": 32676817,
+                  "TenantId": 1356,
+                  "StateId": 2,
+                  "StateName": "New Jersey",
+                  "BuildingId": 1889,
+                  "AuthenticationType": 0,
+                  "DisplayName": "Test, Teacher",
+                  "FirstName": "Teacher",
+                  "LastName": "Test",
+                  "Email": "teacher.test@springmath.xyz",
+                  "LoginId": "teacher.test@springmath.xyz",
+                  "ImagePath": "",
+                  "LanguageId": 1,
+                  "Language": "en",
+                  "DefaultTimeFormat": 12,
+                  "Profile": null,
+                  "ProfileId": 43855,
+                  "Tenant": "ClassLink Certification",
+                  "Building": "Global - ClassLink Certification",
+                  "Role": "Teacher",
+                  "Role_Level": 3,
+                  "LastAccessTime": "2022-04-05T12:41:35.644Z",
+                  "SourcedId": "28442",
+                  "OrgId": [
+                      "3"
+                  ]
+              }
             } -->
-            <OutputClaim ClaimTypeReferenceId="issuerUserId" PartnerClaimType="sub" />
+            <OutputClaim ClaimTypeReferenceId="issuerUserIdInt" PartnerClaimType="UserId" />
+            <OutputClaim ClaimTypeReferenceId="issuerOrgIdInt" PartnerClaimType="TenantId" />
+            <OutputClaim ClaimTypeReferenceId="givenName" PartnerClaimType="FirstName" />
+            <OutputClaim ClaimTypeReferenceId="surName" PartnerClaimType="LastName" />
+            <!-- <OutputClaim ClaimTypeReferenceId="displayName" PartnerClaimType="DisplayName" /> -->
+            <OutputClaim ClaimTypeReferenceId="email" PartnerClaimType="Email" />
+            <OutputClaim ClaimTypeReferenceId="authenticationSource" DefaultValue="socialIdpAuthentication" AlwaysUseDefaultValue="true" />
+            <OutputClaim ClaimTypeReferenceId="identityProvider" DefaultValue="classlink" />
+            <OutputClaim ClaimTypeReferenceId="identityProviderAccessToken" PartnerClaimType="{oauth2:access_token}" />
+
+
+            <!-- <OutputClaim ClaimTypeReferenceId="issuerUserId" PartnerClaimType="sub" />
             <OutputClaim ClaimTypeReferenceId="issuerEmailVerified" PartnerClaimType="email_verified" />
             <OutputClaim ClaimTypeReferenceId="tenantId" PartnerClaimType="tid" />
             <OutputClaim ClaimTypeReferenceId="givenName" PartnerClaimType="given_name" />
             <OutputClaim ClaimTypeReferenceId="surName" PartnerClaimType="family_name" />
-            <!-- <OutputClaim ClaimTypeReferenceId="displayName" PartnerClaimType="name" /> -->
             <OutputClaim ClaimTypeReferenceId="email" PartnerClaimType="email" />
             <OutputClaim ClaimTypeReferenceId="authenticationSource" DefaultValue="socialIdpAuthentication" AlwaysUseDefaultValue="true" />
             <OutputClaim ClaimTypeReferenceId="identityProvider" DefaultValue="classlink" />
-            <OutputClaim ClaimTypeReferenceId="identityProviderAccessToken" PartnerClaimType="{oauth2:access_token}" />
+            <OutputClaim ClaimTypeReferenceId="identityProviderAccessToken" PartnerClaimType="{oauth2:access_token}" /> -->
           </OutputClaims>
           <OutputClaimsTransformations>
+            <OutputClaimsTransformation ReferenceId="CreateIssuerUserIdFromInt" />
+            <OutputClaimsTransformation ReferenceId="CreateIssuerOrgIdFromInt" />
             <OutputClaimsTransformation ReferenceId="CreateRandomUPNUserName" />
             <OutputClaimsTransformation ReferenceId="CreateUserPrincipalName" />
             <OutputClaimsTransformation ReferenceId="CreateAlternativeSecurityId" />
             <OutputClaimsTransformation ReferenceId="CreateDisplayNameFromFirstNameAndLastName" />
           </OutputClaimsTransformations>
           <UseTechnicalProfileForSessionManagement ReferenceId="SM-SocialLogin" />
+        </TechnicalProfile>
+      </TechnicalProfiles>
+    </ClaimsProvider>
+
+
+
+    <ClaimsProvider>
+      <DisplayName>REST APIs</DisplayName>
+      <TechnicalProfiles>
+        <TechnicalProfile Id="ClassLink-OAuth2-GetExtendedProfile">
+          <DisplayName>Classlink get user extended profile information</DisplayName>
+          <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.RestfulProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
+          <Metadata>
+            <!-- 
+              endpoint return
+              GET https://nodeapi.classlink.com/v2/my/profileinfo  
+              {
+                  "sub": "32676817",
+                  "name": "Test, Teacher",
+                  "given_name": "Teacher",
+                  "middle_name": "Test",
+                  "family_name": "Test",
+                  "preferred_username": null,
+                  "email": "teacher.test@springmath.xyz",
+                  "email_verified": true,
+                  "profile": "SpringMath - Teacher",
+                  "website": "",
+                  "phone_number": "",
+                  "phone_number_verified": false,
+                  "picture": "",
+                  "address": {
+                      "locality": "ClassLink Certification",
+                      "region": "New Jersey"
+                  }
+              } 
+            -->
+            <Item Key="ServiceUrl">https://nodeapi.classlink.com/v2/my/profileinfo</Item>
+            <Item Key="SendClaimsIn">Body</Item>
+            <Item Key="AuthenticationType">Bearer</Item>
+            <Item Key="UseClaimAsBearerToken">identityProviderAccessToken</Item>
+            <Item Key="AllowInsecureAuthInProduction">false</Item>
+          </Metadata>
+          <InputClaims>
+            <!-- Claims sent to your REST API -->
+            <InputClaim ClaimTypeReferenceId="identityProviderAccessToken" />
+          </InputClaims>
+          <OutputClaims>
+            <!-- Claims parsed from your REST API -->
+            <OutputClaim ClaimTypeReferenceId="issuerEmailVerified" PartnerClaimType="email_verified" />
+          </OutputClaims>
+          <UseTechnicalProfileForSessionManagement ReferenceId="SM-Noop" />
         </TechnicalProfile>
       </TechnicalProfiles>
     </ClaimsProvider>
@@ -148,48 +222,6 @@
             <OutputClaimsTransformation ReferenceId="CreateUserPrincipalName" />
             <OutputClaimsTransformation ReferenceId="CreateAlternativeSecurityId" />
             <OutputClaimsTransformation ReferenceId="CreateDisplayNameFromFirstNameAndLastName" />
-          </OutputClaimsTransformations>
-          <UseTechnicalProfileForSessionManagement ReferenceId="SM-SocialLogin" />
-        </TechnicalProfile>
-      </TechnicalProfiles>
-    </ClaimsProvider>
-
-    <ClaimsProvider>
-      <Domain>okta.com</Domain>
-      <DisplayName>Login with OKTA</DisplayName>
-      <TechnicalProfiles>
-        <TechnicalProfile Id="OKTA-OpenIdConnect">
-          <DisplayName>OKTA</DisplayName>
-          <Description>Login with your OKTA account</Description>
-          <Protocol Name="OpenIdConnect" />
-          <Metadata>
-            <Item Key="METADATA">https://dev-456048-admin.okta.com/oauth2/default/.well-known/openid-configuration</Item>
-            <Item Key="client_id">0oa6kqjynyUQFfofL4x7</Item>
-            <Item Key="response_types">code</Item>
-            <Item Key="scope">openid profile email</Item>
-            <Item Key="response_mode">query</Item>
-            <Item Key="HttpBinding">POST</Item>
-            <Item Key="UsePolicyInRedirectUri">false</Item>
-          </Metadata>
-          <CryptographicKeys>
-            <Key Id="client_secret" StorageReferenceId="B2C_1A_OktaDevClientSecret" />
-          </CryptographicKeys>
-          <OutputClaims>
-            <OutputClaim ClaimTypeReferenceId="issuerUserId" PartnerClaimType="sub" />
-            <OutputClaim ClaimTypeReferenceId="tenantId" PartnerClaimType="tid" />
-            <OutputClaim ClaimTypeReferenceId="givenName" PartnerClaimType="given_name" />
-            <OutputClaim ClaimTypeReferenceId="surName" PartnerClaimType="family_name" />
-            <OutputClaim ClaimTypeReferenceId="displayName" PartnerClaimType="name" />
-            <OutputClaim ClaimTypeReferenceId="email" PartnerClaimType="email" />
-            <OutputClaim ClaimTypeReferenceId="authenticationSource" DefaultValue="socialIdpAuthentication" AlwaysUseDefaultValue="true" />
-            <OutputClaim ClaimTypeReferenceId="identityProvider" DefaultValue="okta" AlwaysUseDefaultValue="true" />
-            <OutputClaim ClaimTypeReferenceId="identityProviderAccessToken" PartnerClaimType="{oauth2:access_token}" />
-          </OutputClaims>
-          <OutputClaimsTransformations>
-            <OutputClaimsTransformation ReferenceId="CreateRandomUPNUserName" />
-            <OutputClaimsTransformation ReferenceId="CreateUserPrincipalName" />
-            <OutputClaimsTransformation ReferenceId="CreateAlternativeSecurityId" />
-            <!-- <OutputClaimsTransformation ReferenceId="CreateSubjectClaimFromAlternativeSecurityId" /> -->
           </OutputClaimsTransformations>
           <UseTechnicalProfileForSessionManagement ReferenceId="SM-SocialLogin" />
         </TechnicalProfile>
@@ -280,7 +312,7 @@
 
         <!-- This step reads any user attributes that we may not have received when authenticating using ESTS so they can be sent 
           in the token. -->
-        <OrchestrationStep Order="4" Type="ClaimsExchange">
+        <!-- <OrchestrationStep Order="4" Type="ClaimsExchange">
           <Preconditions>
             <Precondition Type="ClaimEquals" ExecuteActionsIf="true">
               <Value>authenticationSource</Value>
@@ -291,7 +323,21 @@
           <ClaimsExchanges>
             <ClaimsExchange Id="AADUserReadWithObjectId" TechnicalProfileReferenceId="AAD-UserReadUsingObjectId" />
           </ClaimsExchanges>
+        </OrchestrationStep> -->
+
+        <OrchestrationStep Order="4" Type="ClaimsExchange">
+          <Preconditions>
+            <Precondition Type="ClaimEquals" ExecuteActionsIf="false">
+              <Value>identityProvider</Value>
+              <Value>classlink</Value>
+              <Action>SkipThisOrchestrationStep</Action>
+            </Precondition>
+          </Preconditions>
+          <ClaimsExchanges>
+            <ClaimsExchange Id="ClassLink-OAuth2-GetExtendedProfile" TechnicalProfileReferenceId="ClassLink-OAuth2-GetExtendedProfile" />
+          </ClaimsExchanges>
         </OrchestrationStep>
+
         <!-- The previous step (SelfAsserted-Social) could have been skipped if there were no attributes to collect 
              from the user. So, in that case, create the user in the directory if one does not already exist 
              (verified using objectId which would be set from the last step if account was created in the directory. -->
