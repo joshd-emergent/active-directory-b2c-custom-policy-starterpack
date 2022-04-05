@@ -1,5 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TrustFrameworkPolicy xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://schemas.microsoft.com/online/cpim/schemas/2013/06" PolicySchemaVersion="0.3.0.0" TenantId="sourcewellb2cauthdev.onmicrosoft.com" PolicyId="B2C_1A_TrustFrameworkExtensions" PublicPolicyUri="http://sourcewellb2cauthdev.onmicrosoft.com/B2C_1A_TrustFrameworkExtensions">
+<TrustFrameworkPolicy xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+  xmlns="http://schemas.microsoft.com/online/cpim/schemas/2013/06" PolicySchemaVersion="0.3.0.0" TenantId="sourcewellb2cauthdev.onmicrosoft.com" PolicyId="B2C_1A_TrustFrameworkExtensions" PublicPolicyUri="http://sourcewellb2cauthdev.onmicrosoft.com/B2C_1A_TrustFrameworkExtensions">
 
   <BasePolicy>
     <TenantId>sourcewellb2cauthdev.onmicrosoft.com</TenantId>
@@ -8,62 +10,6 @@
   <BuildingBlocks></BuildingBlocks>
 
   <ClaimsProviders>
-
-    <!-- <ClaimsProvider>
-      <DisplayName>Facebook</DisplayName>
-      <TechnicalProfiles>
-        <TechnicalProfile Id="Facebook-OAUTH">
-          <Metadata>
-            <Item Key="client_id">0oa6kqjy</Item>
-            <Item Key="scope">email public_profile</Item>
-            <Item Key="ClaimsEndpoint">https://graph.facebook.com/me?fields=id,first_name,last_name,name,email</Item>
-          </Metadata>
-        </TechnicalProfile>
-      </TechnicalProfiles>
-    </ClaimsProvider> -->
-
-    <ClaimsProvider>
-      <Domain>classlink.com</Domain>
-      <DisplayName>Login with ClassLink</DisplayName>
-      <TechnicalProfiles>
-        <TechnicalProfile Id="ClassLink-OpenIdConnect">
-          <DisplayName>ClassLink</DisplayName>
-          <Description>Login with your ClassLink account</Description>
-          <Protocol Name="OpenIdConnect" />
-          <Metadata>
-            <Item Key="METADATA">https://launchpad.classlink.com/.well-known/openid-configuration</Item>
-            <Item Key="client_id">c164745967502792b171340709348ba81c5518fece84</Item>
-            <Item Key="response_types">code id_token</Item>
-            <Item Key="scope">openid profile email</Item>
-            <Item Key="response_mode">query</Item>
-            <Item Key="HttpBinding">POST</Item>
-            <Item Key="UsePolicyInRedirectUri">false</Item>
-          </Metadata>
-          <CryptographicKeys>
-            <Key Id="client_secret" StorageReferenceId="B2C_1A_ClassLinkDevClientSecret" />
-          </CryptographicKeys>
-          <OutputClaims>
-            <OutputClaim ClaimTypeReferenceId="issuerUserId" PartnerClaimType="sub" DefaultValue="001id" />
-            <OutputClaim ClaimTypeReferenceId="tenantId" PartnerClaimType="tid" DefaultValue="001tenant" />
-            <OutputClaim ClaimTypeReferenceId="givenName" PartnerClaimType="given_name" DefaultValue="001givenName" />
-            <OutputClaim ClaimTypeReferenceId="surName" PartnerClaimType="family_name" DefaultValue="001FamilyName" />
-            <OutputClaim ClaimTypeReferenceId="displayName" PartnerClaimType="name" DefaultValue="001Name" />
-            <OutputClaim ClaimTypeReferenceId="email" PartnerClaimType="email" DefaultValue="001Name@example.com" />
-            <OutputClaim ClaimTypeReferenceId="authenticationSource" DefaultValue="socialIdpAuthentication" AlwaysUseDefaultValue="true" />
-            <OutputClaim ClaimTypeReferenceId="identityProvider" DefaultValue="classlink" AlwaysUseDefaultValue="true" />
-            <OutputClaim ClaimTypeReferenceId="identityProviderAccessToken" PartnerClaimType="{oauth2:access_token}" />
-          </OutputClaims>
-          <OutputClaimsTransformations>
-            <OutputClaimsTransformation ReferenceId="CreateRandomUPNUserName" />
-            <OutputClaimsTransformation ReferenceId="CreateUserPrincipalName" />
-            <OutputClaimsTransformation ReferenceId="CreateAlternativeSecurityId" />
-            <!-- <OutputClaimsTransformation ReferenceId="CreateSubjectClaimFromAlternativeSecurityId" /> -->
-          </OutputClaimsTransformations>
-          <UseTechnicalProfileForSessionManagement ReferenceId="SM-SocialLogin" />
-        </TechnicalProfile>
-      </TechnicalProfiles>
-    </ClaimsProvider>
-
     <ClaimsProvider>
       <Domain>classlink.com</Domain>
       <DisplayName>Login with ClassLink</DisplayName>
@@ -114,6 +60,7 @@
                 }
             } -->
             <OutputClaim ClaimTypeReferenceId="issuerUserId" PartnerClaimType="sub" />
+            <OutputClaim ClaimTypeReferenceId="issuerEmailVerified" PartnerClaimType="email_verified" />
             <OutputClaim ClaimTypeReferenceId="tenantId" PartnerClaimType="tid" />
             <OutputClaim ClaimTypeReferenceId="givenName" PartnerClaimType="given_name" />
             <OutputClaim ClaimTypeReferenceId="surName" PartnerClaimType="family_name" />
@@ -139,12 +86,13 @@
       <DisplayName>Login with Clever</DisplayName>
       <TechnicalProfiles>
         <TechnicalProfile Id="Clever-OAuth2">
-          <DisplayName>Clever</DisplayName>
+          <DisplayName>Sign In with Clever</DisplayName>
           <Description>Login with your Clever account</Description>
           <Protocol Name="OAuth2" />
           <Metadata>
             <Item Key="ProviderName">clever</Item>
-            <Item Key="client_id">c0e6e6a15606c333ac84</Item>
+            <Item Key="client_id">0fea920cf76e822266b9</Item>
+            <!-- <Item Key="client_id">c0e6e6a15606c333ac84</Item> -->
             <!-- <Item Key="METADATA">https://clever.com/.well-known/openid-configuration</Item> -->
             <Item Key="authorization_endpoint">https://clever.com/oauth/authorize</Item>
             <Item Key="AccessTokenEndpoint">https://clever.com/oauth/tokens</Item>
@@ -184,6 +132,8 @@
               }             
             -->
             <OutputClaim ClaimTypeReferenceId="issuerUserId" PartnerClaimType="sub" />
+            <OutputClaim ClaimTypeReferenceId="issuerOrgId" PartnerClaimType="district_id" />
+            <OutputClaim ClaimTypeReferenceId="issuerEmailVerified" PartnerClaimType="email_verified" />
             <OutputClaim ClaimTypeReferenceId="tenantId" PartnerClaimType="tid" />
             <OutputClaim ClaimTypeReferenceId="givenName" PartnerClaimType="given_name" />
             <OutputClaim ClaimTypeReferenceId="surName" PartnerClaimType="family_name" />
@@ -274,8 +224,8 @@
             <!-- <ClaimsProviderSelection TargetClaimsExchangeId="FacebookExchange" /> -->
             <ClaimsProviderSelection TargetClaimsExchangeId="CleverSignin" />
             <ClaimsProviderSelection TargetClaimsExchangeId="ClassLinkSignin" />
-            <ClaimsProviderSelection TargetClaimsExchangeId="OktaSignin" />
-            <ClaimsProviderSelection ValidationClaimsExchangeId="LocalAccountSigninEmailExchange" />
+            <!-- <ClaimsProviderSelection TargetClaimsExchangeId="OktaSignin" /> -->
+            <!-- <ClaimsProviderSelection ValidationClaimsExchangeId="LocalAccountSigninEmailExchange" /> -->
           </ClaimsProviderSelections>
           <ClaimsExchanges>
             <ClaimsExchange Id="LocalAccountSigninEmailExchange" TechnicalProfileReferenceId="SelfAsserted-LocalAccountSignin-Email" />
@@ -294,8 +244,8 @@
             <!-- <ClaimsExchange Id="FacebookExchange" TechnicalProfileReferenceId="Facebook-OAUTH" /> -->
             <ClaimsExchange Id="CleverSignin" TechnicalProfileReferenceId="Clever-OAuth2" />
             <ClaimsExchange Id="ClassLinkSignin" TechnicalProfileReferenceId="ClassLink-OAuth2" />
-            <ClaimsExchange Id="OktaSignin" TechnicalProfileReferenceId="OKTA-OpenIdConnect" />
-            <ClaimsExchange Id="SignUpWithLogonEmailExchange" TechnicalProfileReferenceId="LocalAccountSignUpWithLogonEmail" />
+            <!-- <ClaimsExchange Id="OktaSignin" TechnicalProfileReferenceId="OKTA-OpenIdConnect" /> -->
+            <!-- <ClaimsExchange Id="SignUpWithLogonEmailExchange" TechnicalProfileReferenceId="LocalAccountSignUpWithLogonEmail" /> -->
           </ClaimsExchanges>
         </OrchestrationStep>
 
@@ -316,7 +266,7 @@
         <!-- Show self-asserted page only if the directory does not have the user account already (i.e. we do not have an objectId). 
           This can only happen when authentication happened using a social IDP. If local account was created or authentication done
           using ESTS in step 2, then an user account must exist in the directory by this time. -->
-        <OrchestrationStep Order="4" Type="ClaimsExchange">
+        <!-- <OrchestrationStep Order="4" Type="ClaimsExchange">
           <Preconditions>
             <Precondition Type="ClaimsExist" ExecuteActionsIf="true">
               <Value>objectId</Value>
@@ -326,11 +276,11 @@
           <ClaimsExchanges>
             <ClaimsExchange Id="SelfAsserted-Social" TechnicalProfileReferenceId="SelfAsserted-Social" />
           </ClaimsExchanges>
-        </OrchestrationStep>
+        </OrchestrationStep> -->
 
         <!-- This step reads any user attributes that we may not have received when authenticating using ESTS so they can be sent 
           in the token. -->
-        <OrchestrationStep Order="5" Type="ClaimsExchange">
+        <OrchestrationStep Order="4" Type="ClaimsExchange">
           <Preconditions>
             <Precondition Type="ClaimEquals" ExecuteActionsIf="true">
               <Value>authenticationSource</Value>
@@ -345,7 +295,7 @@
         <!-- The previous step (SelfAsserted-Social) could have been skipped if there were no attributes to collect 
              from the user. So, in that case, create the user in the directory if one does not already exist 
              (verified using objectId which would be set from the last step if account was created in the directory. -->
-        <OrchestrationStep Order="6" Type="ClaimsExchange">
+        <OrchestrationStep Order="5" Type="ClaimsExchange">
           <Preconditions>
             <Precondition Type="ClaimsExist" ExecuteActionsIf="true">
               <Value>objectId</Value>
@@ -357,7 +307,7 @@
           </ClaimsExchanges>
         </OrchestrationStep>
 
-        <OrchestrationStep Order="7" Type="SendClaims" CpimIssuerTechnicalProfileReferenceId="JwtIssuer" />
+        <OrchestrationStep Order="6" Type="SendClaims" CpimIssuerTechnicalProfileReferenceId="JwtIssuer" />
 
       </OrchestrationSteps>
       <ClientDefinition ReferenceId="DefaultWeb" />
